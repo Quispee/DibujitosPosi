@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dibujitos Positivos - Grupo de Dibujantes</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #8B5CF6;
+            --secondary: #06B6D4;
+            --accent: #F59E0B;
+            --dark: #1E293B;
+            --light: #F8FAFC;
+            --neon-glow: 0 0 10px currentColor;
+        }
+
+        body {
+            background: linear-gradient(135deg, #0F172A, #1E293B);
+            color: var(--light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath fill='%238B5CF6' d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E"), auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Styles */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 30% 20%, rgba(139, 92, 246, 0.1), transparent 50%),
+                        radial-gradient(circle at 70% 80%, rgba(6, 182, 212, 0.1), transparent 50%);
+            z-index: -1;
+        }
+
+        .logo {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.7),
+                         0 0 20px rgba(139, 92, 246, 0.5),
+                         0 0 30px rgba(139, 92, 246, 0.3);
+            animation: float 6s ease-in-out infinite, neonPulse 2s ease-in-out infinite alternate;
+            position: relative;
+            display: inline-block;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            z-index: -1;
+            border-radius: 50%;
+            filter: blur(20px);
+            opacity: 0.7;
+            animation: rotate 10s linear infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes neonPulse {
+            from {
+                text-shadow: 0 0 10px rgba(139, 92, 246, 0.7),
+                             0 0 20px rgba(139, 92, 246, 0.5),
+                             0 0 30px rgba(139, 92, 246, 0.3);
+            }
+            to {
+                text-shadow: 0 0 15px rgba(139, 92, 246, 0.9),
+                             0 0 25px rgba(139, 92, 246, 0.7),
+                             0 0 35px rgba(139, 92, 246, 0.5),
+                             0 0 45px rgba(139, 92, 246, 0.3);
+            }
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: #94A3B8;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            position: relative;
+            padding: 15px;
+            border-radius: 10px;
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .tagline:hover {
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.4);
+            transform: translateY(-5px);
+        }
+
+        .header-image {
+            width: 100%;
+            max-width: 600px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin: 20px auto;
+            display: block;
+            border: 2px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.2));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .header-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.6);
+        }
+
+        .header-image:hover::before {
+            opacity: 1;
+        }
+
+        /* Artist Grid */
+        .artists-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+
+        .artist-card {
+            background: rgba(30, 41, 59, 0.7);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            backdrop-filter: blur(10px);
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .artist-card::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent), var(--primary));
+            z-index: -1;
+            border-radius: 22px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .artist-card:hover::before {
+            opacity: 1;
+            animation: borderGlow 2s linear infinite;
+        }
+
+        @keyframes borderGlow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+
+        .artist-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px rgba(139, 92, 246, 0.4);
+        }
+
+        .artist-image {
+            width: 200px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 2px solid rgba(139, 92, 246, 0.2);
+            display: block;
+            margin: 0 auto;
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .artist-image::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary), var(--accent));
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .artist-card:hover .artist-image {
+            transform: scale(1.1) rotate(5deg);
+            border-color: var(--primary);
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.6);
+        }
+
+        .artist-card:hover .artist-image::after {
+            opacity: 0.3;
+            animation: rotate 3s linear infinite;
+        }
+
+        .artist-info {
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .artist-name {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .artist-card:hover .artist-name {
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.7);
+        }
+
+        .artist-specialty {
+            color: var(--secondary);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .artist-card:hover .artist-specialty {
+            color: var(--accent);
+            text-shadow: 0 0 8px rgba(245, 158, 11, 0.7);
+        }
+
+        .artist-description {
+            color: #94A3B8;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            transition: all 0.3s ease;
+        }
+
+        .artist-card:hover .artist-description {
+            color: var(--light);
+        }
+
+        .artist-link {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            width: 100%;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .artist-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+            z-index: -1;
+        }
+
+        .artist-link:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+        }
+
+        .artist-link:hover::before {
+            left: 100%;
+        }
+
+        /* Featured Section */
+        .featured {
+            margin: 60px 0;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(139, 92, 246, 0.7),
+                         0 0 20px rgba(139, 92, 246, 0.5);
+            animation: neonPulse 2s ease-in-out infinite alternate;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 3px;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+.gallery-item {
+    width: 200px; /* asegúrate de que ancho = alto */
+    height: 200px;
+    border-radius: 50%; /* forma circular */
+    overflow: hidden;
+    position: relative;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+/* Efecto interactivo al pasar el mouse */
+.gallery-item:hover {
+    transform: scale(1.08) rotate(5deg);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+}
+
+/* Opcional: animación sutil al mover el mouse fuera */
+.gallery-item:active {
+    transform: scale(0.95);
+}
+
+
+        .gallery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(139, 92, 246, 0.3), rgba(6, 182, 212, 0.3));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(139, 92, 246, 0.4);
+        }
+
+        .gallery-item:hover::before {
+            opacity: 1;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+            border-top: 1px solid rgba(139, 92, 246, 0.2);
+            position: relative;
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 50%;
+            color: var(--light);
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+        }
+
+        .social-link:hover {
+            background: transparent;
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 5px 15px rgba(139, 92, 246, 0.4);
+            color: white;
+        }
+
+        .social-link:hover::before {
+            opacity: 1;
+        }
+
+        .copyright {
+            color: #94A3B8;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        footer:hover .copyright {
+            color: var(--light);
+            text-shadow: 0 0 5px rgba(139, 92, 246, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .artists-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .header-image {
+                height: 150px;
+            }
+        }
+
+        /* Decorative Elements */
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .floating-element {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: rgba(139, 92, 246, 0.1);
+            border-radius: 50%;
+            animation: float-around 15s infinite linear;
+            box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+        }
+
+        .floating-element:nth-child(2) {
+            width: 20px;
+            height: 20px;
+            background: rgba(6, 182, 212, 0.1);
+            animation-duration: 20s;
+            top: 20%;
+            left: 80%;
+            box-shadow: 0 0 10px rgba(6, 182, 212, 0.3);
+        }
+
+        .floating-element:nth-child(3) {
+            width: 40px;
+            height: 40px;
+            background: rgba(245, 158, 11, 0.1);
+            animation-duration: 25s;
+            top: 70%;
+            left: 10%;
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.3);
+        }
+
+        @keyframes float-around {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+            25% {
+                transform: translate(100px, 100px) rotate(90deg);
+            }
+            50% {
+                transform: translate(0, 200px) rotate(180deg);
+            }
+            75% {
+                transform: translate(-100px, 100px) rotate(270deg);
+            }
+            100% {
+                transform: translate(0, 0) rotate(360deg);
+            }
+        }
+
+        /* Particles Effect */
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        /* Interactive Cursor */
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgba(139, 92, 246, 0.5);
+            pointer-events: none;
+            z-index: 9999;
+            mix-blend-mode: difference;
+            transition: transform 0.1s ease;
+        }
+
+        .cursor-follower {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            pointer-events: none;
+            z-index: 9998;
+            transition: transform 0.15s ease;
+        }
+
+        /* Audio Player */
+        .audio-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 50px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.3);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .audio-player:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+        }
+
+        .audio-control {
+            background: transparent;
+            border: none;
+            color: var(--light);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .audio-control:hover {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary);
+        }
+
+        .audio-title {
+            font-size: 0.8rem;
+            color: var(--light);
+            max-width: 150px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            z-index: 10000;
+            backdrop-filter: blur(5px);
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: rgba(30, 41, 59, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            border: 1px solid rgba(139, 92, 246, 0.3);
+            box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+            backdrop-filter: blur(10px);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary);
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .modal-text {
+            color: #94A3B8;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .modal-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .modal-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(139, 92, 246, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+        <div class="floating-element"></div>
+    </div>
+
+    <div id="particles-js"></div>
+
+    <div class="cursor"></div>
+    <div class="cursor-follower"></div>
+
+    <div class="audio-player">
+        <button class="audio-control" id="playPause">▶️</button>
+        <span class="audio-title">Música de fondo</span>
+        <button class="audio-control" id="mute">🔊</button>
+    </div>
+
+    <div class="modal" id="welcomeModal">
+        <div class="modal-content">
+            <button class="modal-close" id="closeModal">✕</button>
+            <h2 class="modal-title">¡Bienvenido ala Familia de los Dibujitos Positivos! ✨</h2>
+            <p class="modal-text">Somos una comunidad llena de buena vibra donde nos apoyamos en los lives, compartimos energía positiva y alegría. Aquí todo se trata de sumar, no competir. ¡Disfruta explorando nuestro espacio creativo!</p>
+            <button class="modal-btn" id="acceptBtn">¡Ver comunidad de dibujitos!</button>
+        </div>
+    </div>
+
+    <header>
+        <div class="header-bg"></div>
+        <div class="container">
+            <h1 class="logo">🎨 Dibujitos Positivos</h1>
+            <p class="tagline">Un grupo lleno de buena vibra 💫
+Nos apoyamos en los lives, compartimos energía positiva y alegría.
+¡Aquí todo se trata de sumar, no competir! 🎨💖</p>
+            
+            <!-- Imagen debajo del título -->
+            <img src="https://i.pinimg.com/736x/e9/b6/5b/e9b65bec1420b471a9f41a1f55eade18.jpg" alt="Comunidad Dibujitos Positivos" class="header-image">
+        </div>
+    </header>
+
+    <div class="container">
+        <section class="artists-grid">
+            <!-- Artista 1 -->
+            <div class="artist-card">
+                <img src="https://raw.githubusercontent.com/Quispee/flayer/yuler/skill.jpg" alt="Skill" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">Skill</h2>
+                    <p class="artist-specialty">💻 Desarrollador Web</p>
+                    <p class="artist-description">Diseñando y creando experiencias digitales con código, creatividad y pasión por el detalle.</p>
+                    <a href="https://www.tiktok.com/@skillyull?_t=ZS-90SBXMjCBIS&_r=1" class="artist-link">Ver Perfil</a>
+                </div>
+            </div>
+
+            <!-- Artista 2 -->
+            <div class="artist-card">
+                <img src="https://github.com/Quispee/flayer/blob/yuler/ruben.jpg?raw=true" alt="Carlos Colors" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">🎨 Ruben</h2>
+             
+    <p class="artist-specialty">🔥 Comidas, Familia & Buen Sabor</p>
+    <p class="artist-description">
+      Reunimos sonrisas alrededor de la parrilla.  
+      Sabor casero, unión familiar y momentos que se disfrutan mejor juntos ❤️.
+    </p>
+    <a href="https://www.tiktok.com/@rubn2047?_t=ZS-90SBozeWJvR&_r=1" class="artist-link">Ver Perfil</a>
+                </div>
+            </div>
+
+            <!-- Artista 3 -->
+            <div class="artist-card">
+                <img src="https://github.com/Quispee/flayer/blob/yuler/francoactualizad.jpg?raw=true" alt="Marta Ink" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">✒️francoerivera1</h2>
+                   <p class="artist-specialty">🔥 Chico Divertido & Activo</p>
+    <p class="artist-description">
+      Rebosa energía positiva, alegría y carisma.  
+      Siempre encendiendo el ambiente con una vibra potente que deslumbra a todos 🌟.
+    </p>
+                    <a href="https://www.tiktok.com/@francoerivera1?_t=ZS-90SBwexFT1g&_r=1" class="artist-link">Ver Perfil</a>
+                </div>
+            </div>
+
+            <!-- Artista 4 -->
+            <div class="artist-card">
+                <img src="https://github.com/Quispee/flayer/blob/yuler/jorge.jpg?raw=true" alt="Leo Doodle" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">🖍️jorge</h2>
+                 <p class="artist-specialty">🌞 Artista de Doodle & Lettering con vibra diurna</p>
+<p class="artist-description">Chico carismático que conquista con su energía y sonrisa. Ama la joda, la buena vibra y dibujar paisajes llenos de vida. Su arte refleja su personalidad: espontánea, divertida y llena de encanto.</p>
+
+   <a href="https://www.tiktok.com/@jorge123760?_t=ZS-90WoxaQsABI&_r=1" class="artist-link">Ver perfil</a>
+                </div>
+            </div>
+
+            <!-- Artista 5 -->
+            <div class="artist-card">
+                <img src="https://github.com/Quispee/flayer/blob/yuler/rosa.jpg?raw=true" alt="Sofia Manga" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">Rosa</h2>
+                  <p class="artist-specialty">🎎 Ilustradora de Anime & Manga</p>
+<p class="artist-description">Dibuja personajes que bailan con el alma y ríen con el corazón. Sus mundos están llenos de ritmo, color y alegría inspirada en la cultura japonesa.</p>
+   <a href="https://www.tiktok.com/@rouzs_x?_t=ZS-90WoupgsRbZ&_r=1" class="artist-link">Ver perfil</a>
+                </div>
+            </div>
+
+            <!-- Artista 6 -->
+            <div class="artist-card">
+                <img src="https://github.com/Quispee/flayer/blob/yuler/rulitos.jpg?raw=true" alt="David Abstract" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">🟦 Rulito oño solitario</h2>
+                    <p class="artist-specialty">🎭 Espíritu libre & con flow</p>
+<p class="artist-description">Explora los límites de la forma y el color con la misma pasión con la que se mueve al ritmo de la música. Amante del arte, el baile y las noches llenas de energía creativa.</p>
+
+                    <a href="https://www.tiktok.com/@rulito123marce?_t=ZS-90WoqYXpQpQ&_r=1" class="artist-link">Ver perfil</a>
+                </div>
+            </div>
+               <!-- Artista 6 -->
+            <div class="artist-card">
+                <img src="https://github.com/Quispee/flayer/blob/yuler/pablo.jpg?raw=true" alt="David Abstract" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">🟦Pablo de los Backyardigans</h2>
+                  <p class="artist-specialty">🎭 Soñador & Persistente</p>
+<p class="artist-description">Chico estudioso, con metas claras y buena vibra. Le gusta aprender, reírse de todo y disfrutar el camino mientras cumple sus sueños.</p>
+             <a href="https://www.tiktok.com/@pablodelosba_kyardigans?_t=ZS-90WuRrI56er&_r=1" class="artist-link">Ver perfil</a>
+</div>
+            </div>
+               <!-- Artista 6 -->
+            <div class="artist-card">
+                <img src="https://github.com/Quispee/flayer/blob/yuler/Tyrone.jpg?raw=true" alt="David Abstract" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">🟦Tyrone</h2>
+                  <p class="artist-specialty">🎭 Aventurero & Soñador</p>
+<p class="artist-description">Apasionado por los viajes, la diversión y las nuevas experiencias. Siempre con una sonrisa, buscando descubrir el mundo mientras cumple sus metas.</p>
+
+                    <a href="https://www.tiktok.com/@tyrone__ty?_t=ZS-90Wu4Ta6ivd&_r=1" class="artist-link">Ver perfil</a>
+                </div>
+            </div>
+               <!-- Artista 6 -->
+            <div class="artist-card">
+                <img src="https://github.com/Quispee/flayer/blob/yuler/Pablito.jpg?raw=true" alt="David Abstract" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">🟦Pablito</h2>
+                  <p class="artist-specialty">🎭 Creador & Genio en Contenidos</p>
+<p class="artist-description">Chico creativo, divertido y con mil ideas en la cabeza. Siempre inventando algo nuevo, con esa chispa que hace que todo cobre vida.</p>
+
+                    <a href="https://www.tiktok.com/@pablitorels_?_t=ZS-90WuDqizD1A&_r=1" class="artist-link">Ver perfil</a>
+                </div>
+            </div>
+                 <!-- Artista 6 -->
+            <div class="artist-card">
+                <img src="https://github.com/Quispee/flayer/blob/yuler/elchicho.jpg?raw=true" alt="David Abstract" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">🟦El Chicho</h2>
+                   <p class="artist-specialty">🌍 Creador & Aventurero del Mundo</p>
+<p class="artist-description">Genio en contenidos y amante de los viajes. Le encanta recorrer el mundo, compartir experiencias y ponerle diversión a cada historia que vive.</p>
+
+                    <a href="https://www.tiktok.com/@chicho.com.pe?_t=ZS-90WuBp0vaey&_r=1" class="artist-link">Ver perfil</a>
+                </div>
+            </div>
+               <!-- Artista 6 -->
+            <div class="artist-card">
+                <img src="https://github.com/Quispee/flayer/blob/yuler/Tayrondelosbackyardigansjpg.jpg?raw=true" alt="David Abstract" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">🟦Tayron de los Backyardigans</h2>
+                  <p class="artist-specialty">🌍 Aventurero & Creador con Flow</p>
+<p class="artist-description">Genio en contenidos, viajero incansable y divertido. Siempre con la mochila llena de ideas y una sonrisa lista para conquistar el mundo.</p>
+
+                    <a href="https://www.tiktok.com/@fuck.the.systm?_t=ZS-90Wu6rwwP8G&_r=1" class="artist-link">Ver perfil</a>
+                </div>
+            </div>
+                 <!-- Artista 6 -->
+            <div class="artist-card">
+                <img src="https://github.com/Quispee/flayer/blob/yuler/yomi02.jpg?raw=true" alt="David Abstract" class="artist-image">
+                <div class="artist-info">
+                    <h2 class="artist-name">🟦yomi02</h2>
+                 <p class="artist-specialty">🌍 Aventurera & Showman de la Vida</p>
+<p class="artist-description">Divertida, amante de la joda y de regalar sonrisas donde va. Siempre encendiendo la buena vibra y haciendo de cada momento un show inolvidable.</p>
+
+                    <a href="https://www.tiktok.com/@yomiandherworld?_t=ZS-90Wu1krZhqP&_r=1" class="artist-link">Ver perfil</a>
+                </div>
+            </div>
+        </section>
+        
+
+        <section class="featured">
+            <h2 class="section-title">✨Lideres</h2>
+            <div class="gallery">
+
+                <div class="">
+                    <img src="" alt="">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://raw.githubusercontent.com/Quispee/flayer/yuler/skill.jpg" alt="Obra 1">
+                </div>
+                <div class="gallery-item">
+                    <img src="https://github.com/Quispee/flayer/blob/yuler/ruben.jpg?raw=true" alt="Obra 2">
+                </div>
+                <div class="">
+                    <img src="" alt="">
+                </div>
+                
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="#" class="social-link">📘</a>
+                <a href="#" class="social-link">📷</a>
+                <a href="#" class="social-link">🐦</a>
+                <a href="#" class="social-link">💼</a>
+            </div>
+            <p class="copyright">© 2023 Dibujitos Positivos - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script>
+        // Efecto de aparición suave para las tarjetas
+        document.addEventListener('DOMContentLoaded', function() {
+            const artistCards = document.querySelectorAll('.artist-card');
+            
+            artistCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, 100 * index);
+            });
+            
+            // Efecto hover mejorado
+            artistCards.forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.zIndex = '10';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.zIndex = '1';
+                });
+            });
+        });
+
+        // Cursor personalizado
+        const cursor = document.querySelector('.cursor');
+        const cursorFollower = document.querySelector('.cursor-follower');
+
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+            
+            setTimeout(() => {
+                cursorFollower.style.left = e.clientX + 'px';
+                cursorFollower.style.top = e.clientY + 'px';
+            }, 100);
+        });
+
+        document.addEventListener('mousedown', () => {
+            cursor.style.transform = 'scale(0.8)';
+            cursorFollower.style.transform = 'scale(1.2)';
+        });
+
+        document.addEventListener('mouseup', () => {
+            cursor.style.transform = 'scale(1)';
+            cursorFollower.style.transform = 'scale(1)';
+        });
+
+        // Efectos de partículas
+        function initParticles() {
+            const canvas = document.createElement('canvas');
+            canvas.id = 'particles-js';
+            document.body.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            const particles = [];
+            const particleCount = 50;
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    size: Math.random() * 3 + 1,
+                    speedX: Math.random() * 1 - 0.5,
+                    speedY: Math.random() * 1 - 0.5,
+                    color: `rgba(${Math.floor(Math.random() * 56) + 139}, ${Math.floor(Math.random() * 92) + 92}, ${Math.floor(Math.random() * 246)}, ${Math.random() * 0.5 + 0.1})`
+                });
+            }
+            
+            function animateParticles() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                particles.forEach(particle => {
+                    particle.x += particle.speedX;
+                    particle.y += particle.speedY;
+                    
+                    if (particle.x > canvas.width) particle.x = 0;
+                    if (particle.x < 0) particle.x = canvas.width;
+                    if (particle.y > canvas.height) particle.y = 0;
+                    if (particle.y < 0) particle.y = canvas.height;
+                    
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+                    ctx.fillStyle = particle.color;
+                    ctx.fill();
+                    
+                    // Conectar partículas cercanas
+                    particles.forEach(otherParticle => {
+                        const dx = particle.x - otherParticle.x;
+                        const dy = particle.y - otherParticle.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 100) {
+                            ctx.beginPath();
+                            ctx.strokeStyle = `rgba(139, 92, 246, ${0.2 * (1 - distance/100)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.moveTo(particle.x, particle.y);
+                            ctx.lineTo(otherParticle.x, otherParticle.y);
+                            ctx.stroke();
+                        }
+                    });
+                });
+                
+                requestAnimationFrame(animateParticles);
+            }
+            
+            animateParticles();
+            
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+
+        // Modal de bienvenida
+        const welcomeModal = document.getElementById('welcomeModal');
+        const closeModal = document.getElementById('closeModal');
+        const acceptBtn = document.getElementById('acceptBtn');
+
+        setTimeout(() => {
+            welcomeModal.classList.add('active');
+        }, 1000);
+
+        closeModal.addEventListener('click', () => {
+            welcomeModal.classList.remove('active');
+        });
+
+        acceptBtn.addEventListener('click', () => {
+            welcomeModal.classList.remove('active');
+        });
+
+        // Audio player
+        const audio = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3');
+        const playPauseBtn = document.getElementById('playPause');
+        const muteBtn = document.getElementById('mute');
+        let isPlaying = false;
+        let isMuted = false;
+
+        playPauseBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                audio.pause();
+                playPauseBtn.innerHTML = '▶️';
+            } else {
+                audio.play();
+                playPauseBtn.innerHTML = '⏸️';
+            }
+            isPlaying = !isPlaying;
+        });
+
+        muteBtn.addEventListener('click', () => {
+            if (isMuted) {
+                audio.muted = false;
+                muteBtn.innerHTML = '🔊';
+            } else {
+                audio.muted = true;
+                muteBtn.innerHTML = '🔇';
+            }
+            isMuted = !isMuted;
+        });
+
+        // Inicializar efectos
+        initParticles();
+    </script>
+</body>
+</html>
